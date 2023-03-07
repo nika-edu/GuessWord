@@ -1,0 +1,108 @@
+body {
+  padding: 20%;
+  margin: 0px;
+  background-color: azure;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.app-container {
+  display: grid;
+  background-color: #24aae2;
+  padding: 15px;
+  grid-gap: 10px;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 0.25mm;
+  border-color: #4d4c4c;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.correct-letters {
+  width: 35px;
+  height: 35px;
+  grid-row: 1;
+  background-color: rgba(255, 255, 255, 0.8);
+  align-items: center;
+}
+
+.used-letters {
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.9);
+  grid-column: 1 / span 6;
+  grid-row: 2;
+  text-decoration: line-through;
+  color: rgba(255, 0, 0, 0.8);
+  align-items: center;
+}
+
+.form-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  grid-column: 1 / span 3;
+  grid-row: 3;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding: 2px;
+}
+
+.form {
+  height: 40px;
+  width: 80%;
+  font-size: 22px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+}
+
+.guess-button-container {
+  grid-column: 4 / span 3;
+  grid-row: 3;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.info-text {
+  align-items: center;
+  grid-row: 4;
+  grid-column: 1 / span 2;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: right;
+  font-size: 24px;
+  padding-right: 3px;
+}
+
+.counter-container {
+  align-items: center;
+  grid-row: 4;
+  grid-column: 3;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.new-game-container {
+  grid-row: 4;
+  grid-column: 4 / span 3;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.button {
+  background-color: darkorange; /* Green */
+  border: none;
+  color: navy;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  border-radius: 10px;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(0, 0, 0, 0.5);
+}
