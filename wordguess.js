@@ -12,6 +12,11 @@ let inputLetter; // Den gissade bokstaven
 let secretWord; // Det hemliga ordet
 
 const MAXANTALGISSNINGAR = 10;
+let guessesLeft = MAXANTALGISSNINGAR;
+let gameOver = false;
+let gameWon = false;
+let numberOfCorrectGuesses = 0;
+let correctGuesses = "";
 
 // När fönstret laddas så går programmet till funktionen
 // init.
@@ -38,14 +43,14 @@ function init() {
   inputField.addEventListener("keydown", function (e) {
     if (e.code === "Enter") {
       e.preventDefault();
-      evalGuess();
+      if (!gameOver) evalGuess();
     }
   });
 
   // Anropar funktionerna som ska köras då "gissa-knappen"
   // respektive "Nytt-spel"-knappen trycks ned.
   guessButton.addEventListener("click", function () {
-    evalGuess();
+    if (!gameOver) evalGuess();
   });
   newGameButton.addEventListener("click", clear);
 
@@ -63,7 +68,18 @@ function init() {
 
 function clear() {
   usedLettersContainer.textContent = "";
+  guessesLeft = MAXANTALGISSNINGAR;
+  gameOver = false;
+  gameWon = false;
+  numberOfCorrectGuesses = 0;
+  correctGuesses = "";
+  secretWord = getSecretWord();
   inputField.focus();
+  newGameButton.disabled = false;
+  inputField.disabled = false;
+  counterContainer.textContent = guessesLeft;
+  for (let i = 0; i < secretWord.length; i++)
+    correctLettersContainer[i].textContent = "*";
 }
 
 function getSecretWord() {
@@ -85,29 +101,54 @@ function getSecretWord() {
 // i variabeln usedLetters och visas i rutan
 // usedLettersContainer.
 function evalGuess() {
+  const alphabet = "abcdefghijklmnopqrstuvwxyzåäö";
   console.log("Nu gjordes en gissning!");
   inputLetter = inputField.value.toUpperCase();
 
-  // Om ett enda tecken matats in i formuläret så ska...
-  if (inputLetter.length === 1) {
+  // Om en giltig gissning matats in så ska...
+  if (
+    inputLetter.length === 1 &&
+    alphabet.includes(inputLetter.toLowerCase())
+  ) {
     // ...formuläret tömmas,...
     document.getElementsByClassName("form")[0].value = "";
 
-    // ...tecknet läggas till i usedLetters (detta måste justeras så
-    // att det enbart är de tecken som inte ingår i det hemliga ordet
-    // som läggs till här, tecken som ingår i ordet ska ju in på rätt
-    // plats i correctLetters)
-    // usedLetters.push(` ` + inputLetter);
-    // usedLettersContainer.textContent = usedLetters;
-    usedLettersContainer.textContent += ` ` + inputLetter;
-
-    // Om det inte är exakt ett tecken som formuläret tagit emot så...
+    // ...om tecknet INTE ingår i det hemliga ordet ska det läggas till i usedLetters
+    if (
+      !secretWord.includes(inputLetter.toLowerCase()) &&
+      !usedLettersContainer.textContent.includes(inputLetter)
+    ) {
+      usedLettersContainer.textContent += ` ` + inputLetter;
+      guessesLeft--;
+      counterContainer.textContent = guessesLeft;
+      if (guessesLeft === 0) {
+        gameOver = true;
+        alert(`Det rätta ordet var: ${secretWord.toUpperCase()}`);
+        inputField.disabled = true;
+      }
+      // annars ska det in i rätt ruta i correctLettersContainer
+    } else {
+      for (let i = 0; i < secretWord.length; i++) {
+        if (inputLetter === secretWord[i].toUpperCase()) {
+          correctLettersContainer[i].textContent = inputLetter;
+          if (!correctGuesses.includes(inputLetter)) numberOfCorrectGuesses++;
+          correctGuesses += inputLetter;
+        }
+      }
+    }
+    // Om ogiltig inmatning så...
   } else {
     // ...töms formuläret...
     document.getElementsByClassName("form")[0].value = "";
 
     // ...och en informationsruta visas.
-    alert("Du ska ange precis EN bokstav i gissningen!");
+    alert("Ogiltig inmatning!");
   }
-  inputField.focus();
+  // inputField.focus();
+  if (numberOfCorrectGuesses === secretWord.length) gameWon = true;
+  if (gameWon) {
+    alert("De klarade det! 🎉");
+    inputField.disabled = true;
+    guessButton.disabled = true;
+  }
 }
