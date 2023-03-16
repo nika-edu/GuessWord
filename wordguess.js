@@ -84,7 +84,7 @@ function clear() {
 
 function getSecretWord() {
   // Här ska det hemliga ordet slumpas fram
-  return "hemlig";
+  return "accent";
 }
 
 // Nedanstående funktion körs i samband med att en
@@ -102,6 +102,7 @@ function getSecretWord() {
 // usedLettersContainer.
 function evalGuess() {
   const alphabet = "abcdefghijklmnopqrstuvwxyzåäö";
+  gameWon = true;
   console.log("Nu gjordes en gissning!");
   inputLetter = inputField.value.toUpperCase();
 
@@ -131,7 +132,9 @@ function evalGuess() {
       for (let i = 0; i < secretWord.length; i++) {
         if (inputLetter === secretWord[i].toUpperCase()) {
           correctLettersContainer[i].textContent = inputLetter;
-          if (!correctGuesses.includes(inputLetter)) numberOfCorrectGuesses++;
+          // if (!correctGuesses.includes(inputLetter)) numberOfCorrectGuesses++;
+          if (!correctGuesses.includes(inputLetter.toUpperCase()))
+            numberOfCorrectGuesses++;
           correctGuesses += inputLetter;
         }
       }
@@ -144,10 +147,13 @@ function evalGuess() {
     // ...och en informationsruta visas.
     alert("Ogiltig inmatning!");
   }
-  // inputField.focus();
-  if (numberOfCorrectGuesses === secretWord.length) gameWon = true;
+
+  // Kontroll om spelet är vunnet, vilket görs genom att
+  for (let i = 0; i < secretWord.length; i++) {
+    if (correctLettersContainer[i].textContent === "*") gameWon = false;
+  }
   if (gameWon) {
-    alert("De klarade det! 🎉");
+    alert("Du klarade det! 🎉");
     inputField.disabled = true;
     guessButton.disabled = true;
   }
