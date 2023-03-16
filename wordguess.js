@@ -26,7 +26,6 @@ window.addEventListener("load", function () {
 
 function init() {
   secretWord = getSecretWord(); // Hämta det hemliga ordet
-  console.log(secretWord.split("")); // Enbart debugging
   // Initiera översta raden och knapparna
   correctLettersContainer = document.getElementsByClassName("correct-letters");
   guessButton = document.getElementsByClassName("button")[0];
@@ -56,14 +55,6 @@ function init() {
 
   usedLettersContainer = document.getElementsByClassName("used-letters")[0];
   usedLettersContainer.textContent = "";
-
-  // Några demonstrationer hur utmatning och utseende av appen
-  // kan ställas in med JavaScript-kod.
-  // correctLettersContainer[0].textContent = "A";
-  // correctLettersContainer[1].textContent = "B";
-  // usedLettersContainer.style.background = "green";
-  // usedLettersContainer.style.color = "yellow";
-  // usedLettersContainer.style.fontSize = "28px";
 }
 
 function clear() {
@@ -74,17 +65,34 @@ function clear() {
   numberOfCorrectGuesses = 0;
   correctGuesses = "";
   secretWord = getSecretWord();
-  inputField.focus();
   newGameButton.disabled = false;
   inputField.disabled = false;
   counterContainer.textContent = guessesLeft;
   for (let i = 0; i < secretWord.length; i++)
     correctLettersContainer[i].textContent = "*";
+  inputField.focus();
 }
 
 function getSecretWord() {
   // Här ska det hemliga ordet slumpas fram
-  return "accent";
+  let wordlist = [
+    "accent",
+    "badkar",
+    "cittra",
+    "daglig",
+    "effekt",
+    "fackla",
+    "gallra",
+    "hemlig",
+    "intrig",
+    "jasmin",
+  ];
+
+  let randNum = Math.floor(Math.random() * wordlist.length);
+  let theWord = wordlist[randNum];
+  // Tar bort det aktuella ordet så att det inte anväds igen
+  wordlist.splice(randNum, 1);
+  return theWord;
 }
 
 // Nedanstående funktion körs i samband med att en
@@ -132,9 +140,7 @@ function evalGuess() {
       for (let i = 0; i < secretWord.length; i++) {
         if (inputLetter === secretWord[i].toUpperCase()) {
           correctLettersContainer[i].textContent = inputLetter;
-          // if (!correctGuesses.includes(inputLetter)) numberOfCorrectGuesses++;
-          if (!correctGuesses.includes(inputLetter.toUpperCase()))
-            numberOfCorrectGuesses++;
+          if (!correctGuesses.includes(inputLetter)) numberOfCorrectGuesses++;
           correctGuesses += inputLetter;
         }
       }
